@@ -11,7 +11,7 @@ class RubyDictionary::CLI
 
   def list_data_types
     puts "Welcome to the Ruby Dictionary!"
-    @data_types = ["Booleans", "Symbols", "Numbers", "Arrays", "Hashes"]
+    @data_types = ["1. Enumerables", "2. Strings", "3. Symbols", "4. Numbers", "5. Arrays", "6. Hashes"]
     puts @data_types
   end
 
@@ -22,15 +22,19 @@ class RubyDictionary::CLI
 
       input = gets.strip.downcase
       case input
-      when /boolean(s)?\b/
-        puts "You are now in the Boolean menu"
-      when /symbol(s)?\b/
+      when /enumerable(s)?\b|1/
+        puts "You are now in the Enumerables menu"
+        
+      when /string(s)?\b|2/
+        puts "You are now in the String menu"
+        RubyDictionary::Scraper.scrape_string
+      when /symbol(s)?\b|3/
         puts "You are now in the Symbol menu"
-      when /number(s)?\b/
+      when /number(s)?\b|4/
         puts "You are now in the Number menu"
-      when /array(s)?\b/
+      when /array(s)?\b|5/
         puts "You are now in the Array menu"
-      when /hash(es)?\b/
+      when /hash(es)?\b|6/
         puts "You are now in the Hash menu"
       else
         puts "I'm sorry, I didn't get that. Please enter a data type or type exit."
