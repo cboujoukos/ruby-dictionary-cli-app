@@ -7,6 +7,7 @@ class RubyDictionary::CLI
   def call
     list_data_types
     menu
+    goodbye
   end
 
   def list_data_types
@@ -18,16 +19,18 @@ class RubyDictionary::CLI
   def menu
     input = nil
     puts "Enter the data type you like to explore, or type exit."
-    while input != "exit"
+    until input == "exit"
 
       input = gets.strip.downcase
       case input
+      when "list"
+        puts @data_types
       when /enumerable(s)?\b|1/
         puts "You are now in the Enumerables menu"
-        
+
       when /string(s)?\b|2/
         puts "You are now in the String menu"
-        RubyDictionary::Scraper.scrape_string
+        RubyDictionary::Method.scrape_string
       when /symbol(s)?\b|3/
         puts "You are now in the Symbol menu"
       when /number(s)?\b|4/
@@ -37,10 +40,14 @@ class RubyDictionary::CLI
       when /hash(es)?\b|6/
         puts "You are now in the Hash menu"
       else
-        puts "I'm sorry, I didn't get that. Please enter a data type or type exit."
-        puts @data_types
-
+        if input != "exit"
+          puts "I'm sorry, I didn't get that. Please enter a data type or type list or type exit."
+        end
       end
+    end
+
+    def goodbye
+      puts "Happy Coding!"
     end
   end
 

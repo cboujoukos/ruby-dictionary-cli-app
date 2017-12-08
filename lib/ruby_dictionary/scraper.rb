@@ -1,7 +1,8 @@
 require 'nokogiri'
 
 
-class RubyDictionary::Scraper
+class RubyDictionary::Method
+  attr_accessor :name, :description, :examples, :see_also, :return_statement
 
   ### instance_methods.first.inner_html.split("→ ")[0] selects everything before the return statement.
 
@@ -9,7 +10,14 @@ class RubyDictionary::Scraper
     puts "Welcome to strings!"
     doc = Nokogiri::HTML(open("http://ruby-doc.org/core-2.4.2/String.html"))
     instance_methods = doc.css("#public-instance-method-details .method-callseq")
-    binding.pry
+    #binding.pry
+
+    instance_methods.each do |m|
+      method = self.new
+      method.name = m.inner_html.split("→ ")[0]
+    end
+    puts "we scraped strings!"
+
   end
 
   def self.scrape_symbol
