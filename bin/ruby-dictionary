@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
 
+require './lib/ruby_dictionary'
 
-puts "Hello World"
+
+RubyDictionary::CLI.new.call

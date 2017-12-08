@@ -1,5 +1,2 @@
-require "ruby_dictionary/version"
-
-module RubyDictionary
-  # Your code goes here...
-end
+require_relative "./ruby_dictionary/version"
+require_relative './ruby_dictionary/cli'
