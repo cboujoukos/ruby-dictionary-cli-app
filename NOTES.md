@@ -22,3 +22,11 @@ lists public instance methods for the selected data type
 Which method do you want to learn more about?
 prompts user to enter #method
 returns description and examples
+
+
+I think I should create separate Scraper and Method classes
+
+FINDABLE?
+
+pry(RubyDictionary::Method)> string_methods.detect{|n| n.name == "downcase"}
+=> #<RubyDictionary::Method:0x000000017e12a0 @name="downcase">
