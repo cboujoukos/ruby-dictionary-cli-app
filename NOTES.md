@@ -18,5 +18,7 @@ asks what Class the user wants to explore
 prompts for input of Primitive data type
 
 lists public instance methods for the selected data type
+
+Which method do you want to learn more about?
 prompts user to enter #method
 returns description and examples
