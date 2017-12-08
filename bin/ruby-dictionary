@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-require './lib/ruby_dictionary'
+#require './lib/ruby_dictionary'
+require "bundler/setup"
+require "ruby_dictionary"
 
 
 RubyDictionary::CLI.new.call

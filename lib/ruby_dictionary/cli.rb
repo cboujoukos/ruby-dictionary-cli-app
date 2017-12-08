@@ -2,6 +2,8 @@
 
 class RubyDictionary::CLI
 
+
+
   def call
     list_data_types
     menu
@@ -9,14 +11,15 @@ class RubyDictionary::CLI
 
   def list_data_types
     puts "Welcome to the Ruby Dictionary!"
-    data_types = ["Booleans", "Symbols", "Numbers", "Arrays", "Hashes"]
-    puts data_types
+    @data_types = ["Booleans", "Symbols", "Numbers", "Arrays", "Hashes"]
+    puts @data_types
   end
 
   def menu
     input = nil
+    puts "Enter the data type you like to explore, or type exit."
     while input != "exit"
-      puts "Enter the data type you like to explore, or type exit."
+
       input = gets.strip.downcase
       case input
       when /boolean(s)?\b/
@@ -31,6 +34,8 @@ class RubyDictionary::CLI
         puts "You are now in the Hash menu"
       else
         puts "I'm sorry, I didn't get that. Please enter a data type or type exit."
+        puts @data_types
+
       end
     end
   end
