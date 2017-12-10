@@ -33,6 +33,7 @@ class RubyDictionary::CLI
         RubyDictionary::SB.scrape_string
       when /symbol(s)?\b|3/
         puts "You are now in the Symbol menu"
+        RubyDictionary::SB.scrape_symbol
       when /number(s)?\b|4/
         puts "You are now in the Number menu"
       when /array(s)?\b|5/
