@@ -17,12 +17,21 @@ class RubyDictionary::Method
 
     instance_methods.each do |m|
       method = self.new
-      #method.name = m..inner_html.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
-      method.name = m["id"].split("-")[0] #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
+      #binding.pry
+      #method.name = m.inner_html.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
+      if m["id"].split("-")[0].match(/\d.+/) != nil
+        method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
+      elsif m["id"].split("-")[1] == "21"
+        method.name = "#{m["id"].split("-")[0]}!" #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
+      elsif m["id"].split("-")[1] == "3F"
+        method.name = "#{m["id"].split("-")[0]}?"
+      else
+        method.name = m["id"].split("-")[0]
+      end
       string_methods << method
     end
     puts "we scraped strings!"
-    binding.pry
+    #binding.pry
 
   end
 

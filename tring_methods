@@ -1,0 +1,26 @@
+
+[1mFrom:[0m /home/chris/code/portfolio-projects/ruby_dictionary/lib/ruby_dictionary/scraper.rb @ line 29 RubyDictionary::Method.scrape_string:
+
+    [1;34m10[0m: [32mdef[0m [1;36mself[0m.[1;34mscrape_string[0m
+    [1;34m11[0m:   string_methods = []
+    [1;34m12[0m:   puts [31m[1;31m"[0m[31mWelcome to strings![1;31m"[0m[31m[0m
+    [1;34m13[0m:   doc = [1;34;4mNokogiri[0m::HTML(open([31m[1;31m"[0m[31mhttp://ruby-doc.org/core-2.4.2/String.html[1;31m"[0m[31m[0m))
+    [1;34m14[0m:   [1;34m#binding.pry[0m
+    [1;34m15[0m:   instance_methods = doc.css([31m[1;31m"[0m[31m#public-instance-method-details .method-detail[1;31m"[0m[31m[0m)
+    [1;34m16[0m:   [1;34m#binding.pry[0m
+    [1;34m17[0m: 
+    [1;34m18[0m:   instance_methods.each [32mdo[0m |m|
+    [1;34m19[0m:     method = [1;36mself[0m.new
+    [1;34m20[0m:     [1;34m#method.name = m.inner_html.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc[0m
+    [1;34m21[0m:     [32mif[0m m[[31m[1;31m"[0m[31mid[1;31m"[0m[31m[0m].split([31m[1;31m"[0m[31m-[1;31m"[0m[31m[0m)[[1;34m0[0m] == [35m[1;35m/[0m[35m^[1;35m\d[0m[35m.+[1;35m/[0m[35m[0m
+    [1;34m22[0m:       method.name = m.inner_html.split([31m[1;31m"[0m[31m→ [1;31m"[0m[31m[0m)[[1;34m0[0m]
+    [1;34m23[0m:     [32melse[0m
+    [1;34m24[0m:       method.name = m[[31m[1;31m"[0m[31mid[1;31m"[0m[31m[0m].split([31m[1;31m"[0m[31m-[1;31m"[0m[31m[0m)[[1;34m0[0m] [1;34m#this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)[0m
+    [1;34m25[0m:     [32mend[0m
+    [1;34m26[0m:     string_methods << method
+    [1;34m27[0m:   [32mend[0m
+    [1;34m28[0m:   puts [31m[1;31m"[0m[31mwe scraped strings![1;31m"[0m[31m[0m
+ => [1;34m29[0m:   binding.pry
+    [1;34m30[0m: 
+    [1;34m31[0m: [32mend[0m
+
