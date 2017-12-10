@@ -28,5 +28,4 @@ I think I should create separate Scraper and Method classes
 
 FINDABLE?
 
-pry(RubyDictionary::Method)> string_methods.detect{|n| n.name == "downcase"}
-=> #<RubyDictionary::Method:0x000000017e12a0 @name="downcase">
+FIND OUT HOW TO REMOVE HTML TAGS FROM DESCRIPTIONS (ie See Also links)

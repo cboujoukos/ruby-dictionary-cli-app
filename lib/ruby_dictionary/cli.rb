@@ -37,6 +37,7 @@ class RubyDictionary::CLI
         puts "You are now in the Number menu"
       when /array(s)?\b|5/
         puts "You are now in the Array menu"
+        RubyDictionary::SB.scrape_array
       when /hash(es)?\b|6/
         puts "You are now in the Hash menu"
       else
