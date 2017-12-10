@@ -18,6 +18,8 @@ class RubyDictionary::Method
     instance_methods.each do |m|
       method = self.new
       #binding.pry
+      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
+      #binding.pry
       #method.name = m.inner_html.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
       if m["id"].split("-")[0].match(/\d.+/) != nil
         method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
@@ -31,7 +33,7 @@ class RubyDictionary::Method
       string_methods << method
     end
     puts "we scraped strings!"
-    #binding.pry
+    binding.pry
 
   end
 
