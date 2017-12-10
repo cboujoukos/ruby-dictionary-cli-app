@@ -1,22 +1,13 @@
-class RubyDictionary::Method
+require 'nokogiri'
+
+
+class RubyDictionary::SB
   attr_accessor :name, :description, :examples, :see_also, :return_statement
 
   ### instance_methods = doc.css("#public-instance-method-details .method-callseq")
   ### instance_methods.first.inner_html.split("→ ")[0] selects everything before the return statement.
   ### method.name = m.inner_html.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
   ### method.name = "#{m["id"].split("-")[0]}!" #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
-
-#  def initialize(name=nil, description=nil, examples=nil, see_also=nil, return_statement=nil)
-#    @name = name
-#    @description = description
-#    @examples = examples
-#    @see_also = see_also
-#    @return_statement = return_statement
-#  end
-
-  def self.create_string_list(list)
-    self.new
-  end
 
   def self.scrape_string
     string_methods = []
@@ -42,6 +33,7 @@ class RubyDictionary::Method
         method.name = m["id"].split("-")[0]
       end
       method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
+      method.examples = m.css("pre.ruby").inner_html.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
 
 #      if m["id"].split("-")[0].match(/\d.+/) != nil
 #        method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")

@@ -30,7 +30,7 @@ class RubyDictionary::CLI
 
       when /string(s)?\b|2/
         puts "You are now in the String menu"
-        RubyDictionary::Method.scrape_string
+        RubyDictionary::SB.scrape_string
       when /symbol(s)?\b|3/
         puts "You are now in the Symbol menu"
       when /number(s)?\b|4/

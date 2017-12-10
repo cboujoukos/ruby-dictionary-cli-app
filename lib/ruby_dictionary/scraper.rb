@@ -1,35 +1,50 @@
 require 'nokogiri'
 
 
-class RubyDictionary::Method
-  attr_accessor :name, :description, :examples, :see_also, :return_statement
+class RubyDictionary::Scraper
+
 
   ### instance_methods = doc.css("#public-instance-method-details .method-callseq")
   ### instance_methods.first.inner_html.split("→ ")[0] selects everything before the return statement.
+  ### method.name = m.inner_html.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
+  ### method.name = "#{m["id"].split("-")[0]}!" #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
 
-  def self.scrape_string
+  def scrape_strings
     string_methods = []
     puts "Welcome to strings!"
     doc = Nokogiri::HTML(open("http://ruby-doc.org/core-2.4.2/String.html"))
     #binding.pry
-    instance_methods = doc.css("#public-instance-method-details .method-detail")
+    public_instance_methods = doc.css("#public-instance-method-details .method-detail")
     #binding.pry
+  end
 
-    instance_methods.each do |m|
+  def list_string_methods
+    scrape_strings.each do |m|
       method = self.new
       #binding.pry
-      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
+#      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
       #binding.pry
-      #method.name = m.inner_html.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
-      if m["id"].split("-")[0].match(/\d.+/) != nil
+      case
+      when m["id"].split("-")[0].match(/\d.+/) != nil
         method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
-      elsif m["id"].split("-")[1] == "21"
-        method.name = "#{m["id"].split("-")[0]}!" #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
-      elsif m["id"].split("-")[1] == "3F"
+      when m["id"].split("-")[1] == "21"
+        method.name = "#{m["id"].split("-")[0]}!"
+      when m["id"].split("-")[1] == "3F"
         method.name = "#{m["id"].split("-")[0]}?"
       else
         method.name = m["id"].split("-")[0]
       end
+      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
+
+#      if m["id"].split("-")[0].match(/\d.+/) != nil
+#        method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
+#      elsif m["id"].split("-")[1] == "21"
+#        method.name = "#{m["id"].split("-")[0]}!"
+#      elsif m["id"].split("-")[1] == "3F"
+#        method.name = "#{m["id"].split("-")[0]}?"
+#      else
+#        method.name = m["id"].split("-")[0]
+#      end
       string_methods << method
     end
     puts "we scraped strings!"
