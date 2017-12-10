@@ -5,13 +5,13 @@ class RubyDictionary::CLI
 
 
   def call
+    puts "Welcome to the Ruby Dictionary!"
     list_data_types
     menu
     goodbye
   end
 
   def list_data_types
-    puts "Welcome to the Ruby Dictionary!"
     @data_types = ["1. Enumerables", "2. Strings", "3. Symbols", "4. Numbers", "5. Arrays", "6. Hashes"]
     puts @data_types
   end
@@ -29,8 +29,17 @@ class RubyDictionary::CLI
         puts "You are now in the Enumerables menu"
 
       when /string(s)?\b|2/
-        puts "You are now in the String menu"
         RubyDictionary::SB.scrape_string
+        puts RubyDictionary::String.define_string
+        puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
+        input = gets.strip.downcase
+        case input
+        when "list"
+          RubyDictionary::String.list_public_instance_methods
+        when "menu"
+          self.list_data_types
+          self.menu
+        end
       when /symbol(s)?\b|3/
         puts "You are now in the Symbol menu"
         RubyDictionary::SB.scrape_symbol

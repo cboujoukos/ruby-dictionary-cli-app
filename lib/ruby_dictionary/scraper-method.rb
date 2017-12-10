@@ -37,12 +37,11 @@ class RubyDictionary::SB
       method.return_statement = m.css(".method-callseq").inner_html.split("→ ")[1]
       #method.test_desc = doc.xpath("//")
 
-
+      RubyDictionary::String.all << method
       string_methods << method
     end
-    puts "we scraped strings!"
     binding.pry
-
+    #string_methods.each{|m| puts m.name}
   end
 
   def self.scrape_symbol
