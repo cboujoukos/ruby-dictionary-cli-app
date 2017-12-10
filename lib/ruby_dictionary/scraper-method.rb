@@ -34,6 +34,7 @@ class RubyDictionary::SB
       end
       method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
       method.examples = m.css("pre.ruby").inner_html.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
+      method.return_statement = m.css(".method-callseq").inner_html.split("→ ")[1]
 
 #      if m["id"].split("-")[0].match(/\d.+/) != nil
 #        method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
