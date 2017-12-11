@@ -23,13 +23,16 @@ class RubyDictionary::CLI
 
       input = gets.strip.downcase
       case input
+      when "names"
+        RubyDictionary::SB.scrape_names(RubyDictionary::String, RubyDictionary::String.url)
       when "list"
         list_data_types
       when /enumerable(s)?\b|1/
         RubyDictionary::SB.scrape(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Enumerable)
       when /string(s)?\b|2/
-        RubyDictionary::SB.scrape(RubyDictionary::String, RubyDictionary::String.url)
+        RubyDictionary::SB.scrape_names(RubyDictionary::String, RubyDictionary::String.url)
+        #RubyDictionary::SB.scrape(RubyDictionary::String, RubyDictionary::String.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::String)
       when /symbol(s)?\b|3/
         RubyDictionary::SB.scrape(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
