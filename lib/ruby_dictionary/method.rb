@@ -5,10 +5,10 @@ class RubyDictionary::Method
   @@all = []
   @callseq = []
 
-  def self.list_public_instance_methods
+  def self.list_public_instance_methods(klass)
     #RubyDictionary::SB.scrape_string
     #self.all.each{|m| print "#{m.name}   :   "}
-    self.all.each{|m| puts m.name}
+    klass.all.each{|m| puts m.name}
   end
 
   def self.define(klass)
@@ -25,7 +25,7 @@ class RubyDictionary::Method
       input = gets.strip.downcase
       case
       when input == "list"
-        klass.list_public_instance_methods
+        list_public_instance_methods(klass)
         puts "\n"
       when input == "menu" || input == "exit"
         self.list_data_types

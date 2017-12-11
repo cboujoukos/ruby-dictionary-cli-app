@@ -2,7 +2,7 @@ require 'nokogiri'
 
 
 class RubyDictionary::SB
-  attr_accessor :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq
+#  attr_accessor :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq
 
 #  enumerable_url = "https://ruby-doc.org/core-2.4.2/Enumerable.html"
 #  string_url = "https://ruby-doc.org/core-2.4.2/String.html"
@@ -24,10 +24,7 @@ class RubyDictionary::SB
     public_instance_methods = doc.css("#public-instance-method-details .method-detail")
 
     public_instance_methods.each do |m|
-      method = self.new
-      #binding.pry
-#      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
-      #binding.pry
+      method = klass.new
       case
       when m["id"].split("-")[0].match(/\d.+/) != nil
         method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")

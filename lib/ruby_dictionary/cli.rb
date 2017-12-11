@@ -7,7 +7,7 @@ class RubyDictionary::CLI
   def call
     puts "Welcome to the Ruby Dictionary!"
     list_data_types
-    menu
+    cli_menu
     goodbye
   end
 
@@ -16,9 +16,9 @@ class RubyDictionary::CLI
     puts @data_types
   end
 
-  def menu
+  def cli_menu
     input = nil
-    puts "Enter the data type or mixin you would like to explore, or type exit."
+    puts "Enter the Class or Mixin you would like to explore, or type 'exit'"
     until input == "exit"
 
       input = gets.strip.downcase
@@ -45,13 +45,13 @@ class RubyDictionary::CLI
         RubyDictionary::Method.klass_menu(RubyDictionary::Hash)
       else
         if input != "exit"
-          puts "I'm sorry, I didn't get that. Please enter a data type or type list or type exit."
+          puts "I'm sorry, I didn't get that. Please enter a Class or type 'list' or type 'exit'"
         end
       end
     end
 
     def goodbye
-      puts "Happy Coding!"
+      puts "Happy Coding!!!"
     end
   end
 
