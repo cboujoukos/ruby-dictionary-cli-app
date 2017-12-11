@@ -56,7 +56,8 @@ class RubyDictionary::CLI
         RubyDictionary::SB.scrape(RubyDictionary::Array, RubyDictionary::Array.url)
         RubyDictionary::Array.array_menu
       when /hash(es)?\b|6/
-        puts "You are now in the Hash menu"
+        RubyDictionary::SB.scrape(RubyDictionary::Hash, RubyDictionary::Hash.url)
+        RubyDictionary::Hash.hash_menu
       else
         if input != "exit"
           puts "I'm sorry, I didn't get that. Please enter a data type or type list or type exit."
