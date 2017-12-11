@@ -13,11 +13,12 @@ class RubyDictionary::Method
 
   def self.define(klass)
     doc = Nokogiri::HTML(open(klass.url))
-    @definition = doc.css("div#description p").inner_html.gsub(/<code>|<\/code>/,"")
+    @definition = doc.css("div#description p").inner_html.gsub(/<code>|<\/code>/,"").gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
   end
 
   def self.klass_menu(klass)
     input = nil
+    puts "\n"
     puts self.define(klass)
     puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
     until input == "menu" || input == "exit"
@@ -25,6 +26,7 @@ class RubyDictionary::Method
       case
       when input == "list"
         klass.list_public_instance_methods
+        puts "\n"
       when input == "menu" || input == "exit"
         self.list_data_types
     #  when input == "exit"
@@ -54,6 +56,7 @@ class RubyDictionary::Method
   def self.list_data_types
     @data_types = ["1. Enumerables", "2. Strings", "3. Symbols", "4. Numeric", "5. Arrays", "6. Hashes"]
     puts @data_types
+    puts "Enter the data type or mixin you would like to explore, or type exit."
   end
 
   def method_menu

@@ -1,7 +1,7 @@
-class RubyDictionary::Numeric < RubyDictionary::Method
+class RubyDictionary::Symbol < RubyDictionary::Method
   attr_accessor :definition, :url
 
-  @@url = "https://ruby-doc.org/core-2.4.2/Numeric.html"
+  @@url = "https://ruby-doc.org/core-2.4.2/Symbol.html"
   @@all = []
 
   def self.list_public_instance_methods

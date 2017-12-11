@@ -27,22 +27,22 @@ class RubyDictionary::CLI
         list_data_types
       when /enumerable(s)?\b|1/
         RubyDictionary::SB.scrape(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
-        RubyDictionary::Enumerable.enumerable_menu
+        RubyDictionary::Method.klass_menu(RubyDictionary::Enumerable)
       when /string(s)?\b|2/
         RubyDictionary::SB.scrape(RubyDictionary::String, RubyDictionary::String.url)
-        RubyDictionary::String.string_menu
+        RubyDictionary::Method.klass_menu(RubyDictionary::String)
       when /symbol(s)?\b|3/
-        puts "You are now in the Symbol menu"
-        RubyDictionary::SB.scrape_symbol
+        RubyDictionary::SB.scrape(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
+        RubyDictionary::Method.klass_menu(RubyDictionary::Symbol)
       when /numeric(s)?\b|4/
         RubyDictionary::SB.scrape(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
-        RubyDictionary::Numeric.numeric_menu
+        RubyDictionary::Method.klass_menu(RubyDictionary::Numeric)
       when /array(s)?\b|5/
         RubyDictionary::SB.scrape(RubyDictionary::Array, RubyDictionary::Array.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Array)
       when /hash(es)?\b|6/
         RubyDictionary::SB.scrape(RubyDictionary::Hash, RubyDictionary::Hash.url)
-        RubyDictionary::Hash.hash_menu
+        RubyDictionary::Method.klass_menu(RubyDictionary::Hash)
       else
         if input != "exit"
           puts "I'm sorry, I didn't get that. Please enter a data type or type list or type exit."
