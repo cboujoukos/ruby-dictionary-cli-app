@@ -24,17 +24,22 @@ class RubyDictionary::Numeric < RubyDictionary::Method
       case
       when input == "list"
         self.list_public_instance_methods
-      when input == "menu"
+      when input == "menu" || input == "exit"
         RubyDictionary::Method.list_data_types
-
+    #  when input == "exit"
+    #    puts "How do I terminate the program??"
       else
         if RubyDictionary::Numeric.find_by_name(input) == nil
           puts "Im sorry, I can't find a method by that name, try again or type 'menu' to go to the main menu or type 'exit'"
         else
           method = RubyDictionary::Numeric.find_by_name(input)
-          puts "\n##{method.name}\nReturn Value: #{method.return_statement}\n\n#{method.description}"
+          puts "\n##{method.name}\n"
+          method.callseq.each do |seq|
+            puts seq
+          end
+          puts "\nReturn Value: #{method.return_statement}\n\n#{method.description}\n\n"
           if method.examples != ""
-            puts "\nExamples:\n#{method.examples}"
+            puts "Examples:\n#{method.examples}\n\n"
           end
         end
       end

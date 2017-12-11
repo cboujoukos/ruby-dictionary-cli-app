@@ -14,8 +14,8 @@ A command line interface that allows a user to browse Public instance methods fo
 user types ruby-dictionary
 
 Welcomes the user
-asks what Class the user wants to explore
-prompts for input of Primitive data type
+asks what Class/Mixin the user wants to explore
+prompts for input
 
 lists public instance methods for the selected data type
 

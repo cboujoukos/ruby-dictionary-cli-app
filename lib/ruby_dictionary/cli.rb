@@ -39,7 +39,7 @@ class RubyDictionary::CLI
         RubyDictionary::Numeric.numeric_menu
       when /array(s)?\b|5/
         RubyDictionary::SB.scrape(RubyDictionary::Array, RubyDictionary::Array.url)
-        RubyDictionary::Array.array_menu
+        RubyDictionary::Method.klass_menu(RubyDictionary::Array)
       when /hash(es)?\b|6/
         RubyDictionary::SB.scrape(RubyDictionary::Hash, RubyDictionary::Hash.url)
         RubyDictionary::Hash.hash_menu

@@ -2,7 +2,7 @@ require 'nokogiri'
 
 
 class RubyDictionary::SB
-  attr_accessor :name, :description, :examples, :see_also, :return_statement, :test_desc
+  attr_accessor :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq
 
 #  enumerable_url = "https://ruby-doc.org/core-2.4.2/Enumerable.html"
 #  string_url = "https://ruby-doc.org/core-2.4.2/String.html"
@@ -30,7 +30,7 @@ class RubyDictionary::SB
       #binding.pry
       case
       when m["id"].split("-")[0].match(/\d.+/) != nil
-        method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
+        method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
       when m["id"].split("-")[1] == "21"
         method.name = "#{m["id"].split("-")[0]}!"
       when m["id"].split("-")[1] == "3F"
@@ -38,17 +38,24 @@ class RubyDictionary::SB
       else
         method.name = m["id"].split("-")[0]
       end
-      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
-      method.examples = m.css("pre.ruby").inner_html.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
+      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+      method.examples = m.css("pre.ruby").inner_html.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
       method.return_statement = m.css(".method-callseq").inner_html.split("→ ")[1]
+      #binding.pry
+      call_sequence = []
+      if m.css(".method-heading").length == 1
+        call_sequence << m.css(".method-callseq").inner_html.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+      else
+        m.css(".method-heading").each do |variant|
+          call_sequence << variant.css(".method-callseq").inner_html
+        end
+      end
+      method.callseq = call_sequence
       #method.test_desc = doc.xpath("//")
-
       klass.all << method
-
     end
-    #binding.pry
-    #string_methods.each{|m| puts m.name}
   end
+end
 
 #  def self.scrape_symbol
 #    symbol_methods = []
@@ -178,5 +185,3 @@ class RubyDictionary::SB
 #      RubyDictionary::Enumerable.all << method
 #    end
 #  end
-
-end
