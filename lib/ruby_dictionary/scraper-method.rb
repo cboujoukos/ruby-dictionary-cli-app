@@ -15,7 +15,6 @@ class RubyDictionary::SB
     doc = Nokogiri::HTML(open("http://ruby-doc.org/core-2.4.2/String.html"))
     #binding.pry
     public_instance_methods = doc.css("#public-instance-method-details .method-detail")
-    #binding.pry
 
     public_instance_methods.each do |m|
       method = self.new
@@ -48,7 +47,6 @@ class RubyDictionary::SB
     symbol_methods = []
     doc = Nokogiri::HTML(open("https://ruby-doc.org/core-2.4.0/Symbol.html"))
     doc_text = doc.xpath("//text()").to_s
-    #binding.pry
     public_instance_methods = doc.css("#public-instance-method-details .method-detail")
     #binding.pry
 
@@ -56,7 +54,6 @@ class RubyDictionary::SB
       method = self.new
       #binding.pry
 #      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
-      #binding.pry
       case
       when m["id"].split("-")[0].match(/\d.+/) != nil
         method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
@@ -78,8 +75,34 @@ class RubyDictionary::SB
     binding.pry
   end
 
-  def self.scrape_number
+  def self.scrape_numeric
+    numeric_methods = []
+    doc = Nokogiri::HTML(open("https://ruby-doc.org/core-2.4.2/Numeric.html"))
+    doc_text = doc.xpath("//text()").to_s
+    public_instance_methods = doc.css("#public-instance-method-details .method-detail")
+    #binding.pry
 
+    public_instance_methods.each do |m|
+      method = self.new
+      #binding.pry
+#      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
+      case
+      when m["id"].split("-")[0].match(/\d.+/) != nil
+        method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+      when m["id"].split("-")[1] == "21"
+        method.name = "#{m["id"].split("-")[0]}!"
+      when m["id"].split("-")[1] == "3F"
+        method.name = "#{m["id"].split("-")[0]}?"
+      else
+        method.name = m["id"].split("-")[0]
+      end
+      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip
+      method.examples = m.css("pre.ruby").inner_html.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;/, '&lt;' => "<", '&gt;' => ">")
+      method.return_statement = m.css(".method-callseq").inner_html.split("→ ")[1]
+
+      numeric_methods << method
+    end
+    binding.pry
   end
 
   def self.scrape_array

@@ -12,7 +12,7 @@ class RubyDictionary::CLI
   end
 
   def list_data_types
-    @data_types = ["1. Enumerables", "2. Strings", "3. Symbols", "4. Numbers", "5. Arrays", "6. Hashes"]
+    @data_types = ["1. Enumerables", "2. Strings", "3. Symbols", "4. Numeric", "5. Arrays", "6. Hashes"]
     puts @data_types
   end
 
@@ -43,8 +43,9 @@ class RubyDictionary::CLI
       when /symbol(s)?\b|3/
         puts "You are now in the Symbol menu"
         RubyDictionary::SB.scrape_symbol
-      when /number(s)?\b|4/
-        puts "You are now in the Number menu"
+      when /numeric(s)?\b|4/
+        puts "You are now in the Numeric menu"
+        RubyDictionary::SB.scrape_numeric
       when /array(s)?\b|5/
         puts "You are now in the Array menu"
         RubyDictionary::SB.scrape_array
