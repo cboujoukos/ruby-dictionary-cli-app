@@ -4,12 +4,12 @@ require 'nokogiri'
 class RubyDictionary::SB
   attr_accessor :name, :description, :examples, :see_also, :return_statement, :test_desc
 
-  enumerable_url = "https://ruby-doc.org/core-2.4.2/Enumerable.html"
-  string_url = "https://ruby-doc.org/core-2.4.2/String.html"
-  symbol_url = "https://ruby-doc.org/core-2.4.2/Symbol.html"
-  numeric_url = "https://ruby-doc.org/core-2.4.2/Numeric.html"
-  array_url = "https://ruby-doc.org/core-2.4.2/Array.html"
-  hash_url = "https://ruby-doc.org/core-2.4.2/Hash.html"
+#  enumerable_url = "https://ruby-doc.org/core-2.4.2/Enumerable.html"
+#  string_url = "https://ruby-doc.org/core-2.4.2/String.html"
+#  symbol_url = "https://ruby-doc.org/core-2.4.2/Symbol.html"
+#  numeric_url = "https://ruby-doc.org/core-2.4.2/Numeric.html"
+#  array_url = "https://ruby-doc.org/core-2.4.2/Array.html"
+#  hash_url = "https://ruby-doc.org/core-2.4.2/Hash.html"
 
 
   ### instance_methods = doc.css("#public-instance-method-details .method-callseq")

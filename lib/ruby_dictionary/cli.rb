@@ -24,28 +24,13 @@ class RubyDictionary::CLI
       input = gets.strip.downcase
       case input
       when "list"
-        puts @data_types
+        list_data_types
       when /enumerable(s)?\b|1/
-        RubyDictionary::SB.scrape_enumerable
-        puts RubyDictionary::Enumerable.define_enumerable
-        puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
-        input = gets.strip.downcase
-        case
-        when input == "list"
-          RubyDictionary::Enumerable.list_public_instance_methods
-        when input == "menu"
-          self.list_data_types
-          self.menu
-        when RubyDictionary::Enumerable.find_by_name(input) != nil
-          RubyDictionary::Enumerable.find_by_name(input)
-        else
-          puts "Whatchu want?"
-        end
-
+        RubyDictionary::SB.scrape(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
+        RubyDictionary::Enumerable.enumerable_menu
       when /string(s)?\b|2/
         RubyDictionary::SB.scrape(RubyDictionary::String, RubyDictionary::String.url)
         RubyDictionary::String.string_menu
-
       when /symbol(s)?\b|3/
         puts "You are now in the Symbol menu"
         RubyDictionary::SB.scrape_symbol

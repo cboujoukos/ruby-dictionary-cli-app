@@ -16,7 +16,7 @@ class RubyDictionary::String < RubyDictionary::Method
   end
 
   def self.string_menu
-    puts self.define_string
+    puts "\n#{self.define_string}"
     puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
     input = gets.strip.downcase
     case input
