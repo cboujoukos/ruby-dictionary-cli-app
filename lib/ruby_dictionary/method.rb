@@ -30,6 +30,8 @@ class RubyDictionary::Method
         klass.all.clear
     #  when input == "exit"
     #    puts "How do I terminate the program??"
+
+      ### need to find a way to ask if input is equal to klass.find_by_name(input) with or without the # at the beginning
       else
         if klass.find_by_name(input) == nil
           puts "Im sorry, I can't find a method by that name, try again or type 'menu' to go to the main menu or type 'exit'"

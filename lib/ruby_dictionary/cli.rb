@@ -23,28 +23,31 @@ class RubyDictionary::CLI
 
       input = gets.strip.downcase
       case input
-      when "names"
-        RubyDictionary::SB.scrape_names(RubyDictionary::String, RubyDictionary::String.url)
       when "list"
         list_data_types
       when /enumerable(s)?\b|1/
-        RubyDictionary::SB.scrape(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
+        RubyDictionary::SB.scrape_names(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
+        #RubyDictionary::SB.scrape(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Enumerable)
       when /string(s)?\b|2/
         RubyDictionary::SB.scrape_names(RubyDictionary::String, RubyDictionary::String.url)
         #RubyDictionary::SB.scrape(RubyDictionary::String, RubyDictionary::String.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::String)
       when /symbol(s)?\b|3/
-        RubyDictionary::SB.scrape(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
+        RubyDictionary::SB.scrape_names(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
+        #RubyDictionary::SB.scrape(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Symbol)
       when /numeric(s)?\b|4/
-        RubyDictionary::SB.scrape(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
+        RubyDictionary::SB.scrape_names(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
+        #RubyDictionary::SB.scrape(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Numeric)
       when /array(s)?\b|5/
-        RubyDictionary::SB.scrape(RubyDictionary::Array, RubyDictionary::Array.url)
+        RubyDictionary::SB.scrape_names(RubyDictionary::Array, RubyDictionary::Array.url)
+        #RubyDictionary::SB.scrape(RubyDictionary::Array, RubyDictionary::Array.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Array)
       when /hash(es)?\b|6/
-        RubyDictionary::SB.scrape(RubyDictionary::Hash, RubyDictionary::Hash.url)
+        RubyDictionary::SB.scrape_names(RubyDictionary::Hash, RubyDictionary::Hash.url)
+        #RubyDictionary::SB.scrape(RubyDictionary::Hash, RubyDictionary::Hash.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Hash)
       else
         if input != "exit"

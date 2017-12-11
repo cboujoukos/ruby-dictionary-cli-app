@@ -14,8 +14,8 @@ class RubyDictionary::SB
     public_instance_method_names = doc.css("#method-list-section ul.link-list li")
     public_instance_method_names.each do |mn|
       method = klass.new
-      method.name = mn.css("a").inner_html.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      klass.all << method  if mn.css("a").inner_html.start_with?("#")
+      method.name = mn.css("a").inner_html.gsub(/&lt;|&gt;|&amp;|#/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&", '#' => "")
+      klass.all << method  if !mn.css("a").inner_html.start_with?(":")
     end
     public_instance_methods = doc.css("#public-instance-method-details .method-detail")
     i=0
@@ -53,45 +53,45 @@ class RubyDictionary::SB
     #binding.pry
   end
 
-  def self.scrape(klass, method_url)
-
-    doc = Nokogiri::HTML(open(method_url))
-    #binding.pry
-    public_instance_methods = doc.css("#public-instance-method-details .method-detail")
-
-    public_instance_methods.each do |m|
-      method = klass.new
-
-      case
-      when m["id"].split("-")[0].match(/\d.+/) != nil
-        method.name = m.css(".method-callseq").inner_html.split("→ ")[0].strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&").gsub(/\s+/, "")
-      when m["id"].split("-")[1] == "21"
-        method.name = "#{m["id"].split("-")[0]}!".gsub(/\s+/, "")
-      when m["id"].split("-")[1] == "3F"
-        method.name = "#{m["id"].split("-")[0]}?".gsub(/\s+/, "")
-      else
-        method.name = m["id"].split("-")[0].gsub(/\s+/, "")
-      end
-      method.description = m.css(".method-heading + div p").inner_html.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      method.examples = m.css("pre.ruby").inner_html.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      method.return_statement = m.css(".method-callseq").inner_html.split("→ ")[1]
-      call_sequence = []
-      if m.css(".method-heading").length == 1
-        call_sequence << m.css(".method-callseq").inner_html.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      else
-        m.css(".method-heading").each do |variant|
-          call_sequence << variant.css(".method-callseq").inner_html
-        end
-      end
-      method.callseq = call_sequence
-      #method.test_desc = doc.xpath("//")
-      klass.all << method
-    end
-#    public_instance_method_names = doc.css("#method-list-section ul.link-list li")
-#    public_instance_method_names.each do |mn|
-#      klass.all[i].name = mn.css("a").inner_html.gsub(/&lt;|&gt;|&amp;/, '&lt;' => #"<", '&gt;' => ">", '&amp;' => "&")
-#      klass.all << method  if mn.css("a").inner_html.start_with?("#")
+#  def self.scrape(klass, method_url)
 #
+#    doc = Nokogiri::HTML(open(method_url))
+#    #binding.pry
+#    public_instance_methods = doc.css("#public-instance-method-details #.method-detail")
+#
+#    public_instance_methods.each do |m|
+#      method = klass.new
+#
+#      case
+#      when m["id"].split("-")[0].match(/\d.+/) != nil
+#        method.name = m.css(".method-callseq").inner_html.split("→ #")[0].strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' #=> "&").gsub(/\s+/, "")
+#      when m["id"].split("-")[1] == "21"
+#        method.name = "#{m["id"].split("-")[0]}!".gsub(/\s+/, "")
+#      when m["id"].split("-")[1] == "3F"
+#        method.name = "#{m["id"].split("-")[0]}?".gsub(/\s+/, "")
+#      else
+#        method.name = m["id"].split("-")[0].gsub(/\s+/, "")
+#      end
+#      method.description = m.css(".method-heading + div #p").inner_html.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' #=> "<", '&gt;' => ">", '&amp;' => "&")
+#      method.examples = m.css("pre.ruby").inner_html.gsub(/<span #class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' #=> "<", '&gt;' => ">", '&amp;' => "&")
+#      method.return_statement = m.css(".method-callseq").inner_html.split("→ ")[1]
+#      call_sequence = []
+#      if m.css(".method-heading").length == 1
+#        call_sequence << m.css(".method-callseq").inner_html.gsub(/&lt;|&gt;|&amp;/, #'&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+#      else
+#        m.css(".method-heading").each do |variant|
+#          call_sequence << variant.css(".method-callseq").inner_html
+#        end
+#      end
+#      method.callseq = call_sequence
+#      #method.test_desc = doc.xpath("//")
+#      klass.all << method
 #    end
-  end
+##    public_instance_method_names = doc.css("#method-list-section ul.link-list li")
+##    public_instance_method_names.each do |mn|
+##      klass.all[i].name = mn.css("a").inner_html.gsub(/&lt;|&gt;|&amp;/, '&lt;' => ##"<", '&gt;' => ">", '&amp;' => "&")
+##      klass.all << method  if mn.css("a").inner_html.start_with?("#")
+##
+##    end
+#  end
 end
