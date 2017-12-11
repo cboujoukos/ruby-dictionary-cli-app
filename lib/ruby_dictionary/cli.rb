@@ -43,35 +43,18 @@ class RubyDictionary::CLI
         end
 
       when /string(s)?\b|2/
-        RubyDictionary::SB.scrape(RubyDictionary::String.url)
-        puts RubyDictionary::String.define_string
-        puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
-        input = gets.strip.downcase
-        case input
-        when "list"
-          RubyDictionary::String.list_public_instance_methods
-        when "menu"
-          self.list_data_types
-          self.menu
-        end
+        RubyDictionary::SB.scrape(RubyDictionary::String, RubyDictionary::String.url)
+        RubyDictionary::String.string_menu
+
       when /symbol(s)?\b|3/
         puts "You are now in the Symbol menu"
         RubyDictionary::SB.scrape_symbol
       when /numeric(s)?\b|4/
-        RubyDictionary::SB.scrape_numeric
-        puts RubyDictionary::Numeric.define_numeric
-        puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
-        input = gets.strip.downcase
-        case input
-        when "list"
-          RubyDictionary::Numeric.list_public_instance_methods
-        when "menu"
-          self.list_data_types
-          self.menu
-        end
+        RubyDictionary::SB.scrape(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
+        RubyDictionary::Numeric.numeric_menu
       when /array(s)?\b|5/
-        puts "You are now in the Array menu"
-        RubyDictionary::SB.scrape_array
+        RubyDictionary::SB.scrape(RubyDictionary::Array, RubyDictionary::Array.url)
+        RubyDictionary::Array.array_menu
       when /hash(es)?\b|6/
         puts "You are now in the Hash menu"
       else
