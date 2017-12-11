@@ -11,10 +11,6 @@ class RubyDictionary::Numeric < RubyDictionary::Method
     @return_statement = return_statement
   end
 
-  def self.list_public_instance_methods
-    self.all.each{|m| puts m.name}
-  end
-
   def self.all
     @@all
   end

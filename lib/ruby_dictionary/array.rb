@@ -11,12 +11,6 @@ class RubyDictionary::Array < RubyDictionary::Method
     @return_statement = return_statement
   end
 
-  def self.list_public_instance_methods
-    #RubyDictionary::SB.scrape_array
-    #self.all.each{|m| print "#{m.name}   :   "}
-    self.all.each{|m| puts m.name}
-  end
-
   def self.all
     @@all
   end

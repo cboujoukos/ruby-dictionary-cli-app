@@ -6,8 +6,6 @@ class RubyDictionary::Method
   @callseq = []
 
   def self.list_public_instance_methods(klass)
-    #RubyDictionary::SB.scrape_string
-    #self.all.each{|m| print "#{m.name}   :   "}
     klass.all.each{|m| puts m.name}
   end
 
@@ -29,6 +27,7 @@ class RubyDictionary::Method
         puts "\n"
       when input == "menu" || input == "exit"
         self.list_data_types
+        klass.all.clear
     #  when input == "exit"
     #    puts "How do I terminate the program??"
       else
@@ -57,10 +56,6 @@ class RubyDictionary::Method
     @data_types = ["1. Enumerables", "2. Strings", "3. Symbols", "4. Numeric", "5. Arrays", "6. Hashes"]
     puts @data_types
     puts "Enter the data type or mixin you would like to explore, or type exit."
-  end
-
-  def method_menu
-
   end
 
 end
