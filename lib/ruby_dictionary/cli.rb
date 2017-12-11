@@ -18,7 +18,7 @@ class RubyDictionary::CLI
 
   def menu
     input = nil
-    puts "Enter the data type you like to explore, or type exit."
+    puts "Enter the data type or mixin you would like to explore, or type exit."
     until input == "exit"
 
       input = gets.strip.downcase
@@ -26,7 +26,21 @@ class RubyDictionary::CLI
       when "list"
         puts @data_types
       when /enumerable(s)?\b|1/
-        puts "You are now in the Enumerables menu"
+        RubyDictionary::SB.scrape_enumerable
+        puts RubyDictionary::Enumerable.define_enumerable
+        puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
+        input = gets.strip.downcase
+        case
+        when input == "list"
+          RubyDictionary::Enumerable.list_public_instance_methods
+        when input == "menu"
+          self.list_data_types
+          self.menu
+        when RubyDictionary::Enumerable.find_by_name(input) != nil
+          RubyDictionary::Enumerable.find_by_name(input)
+        else
+          puts "Whatchu want?"
+        end
 
       when /string(s)?\b|2/
         RubyDictionary::SB.scrape_string
@@ -44,8 +58,17 @@ class RubyDictionary::CLI
         puts "You are now in the Symbol menu"
         RubyDictionary::SB.scrape_symbol
       when /numeric(s)?\b|4/
-        puts "You are now in the Numeric menu"
         RubyDictionary::SB.scrape_numeric
+        puts RubyDictionary::Numeric.define_numeric
+        puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
+        input = gets.strip.downcase
+        case input
+        when "list"
+          RubyDictionary::Numeric.list_public_instance_methods
+        when "menu"
+          self.list_data_types
+          self.menu
+        end
       when /array(s)?\b|5/
         puts "You are now in the Array menu"
         RubyDictionary::SB.scrape_array
