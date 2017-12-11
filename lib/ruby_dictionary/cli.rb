@@ -43,7 +43,7 @@ class RubyDictionary::CLI
         end
 
       when /string(s)?\b|2/
-        RubyDictionary::SB.scrape_string
+        RubyDictionary::SB.scrape(RubyDictionary::String.url)
         puts RubyDictionary::String.define_string
         puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
         input = gets.strip.downcase

@@ -17,10 +17,10 @@ class RubyDictionary::SB
   ### method.name = m.inner_html.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
   ### method.name = "#{m["id"].split("-")[0]}!" #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
 
-  def self.scrape_string
+  def self.scrape(method_url)
     string_methods = []
     puts "Welcome to strings!"
-    doc = Nokogiri::HTML(open("http://ruby-doc.org/core-2.4.2/String.html"))
+    doc = Nokogiri::HTML(open(method_url))
     #binding.pry
     public_instance_methods = doc.css("#public-instance-method-details .method-detail")
 

@@ -1,6 +1,7 @@
 class RubyDictionary::String
-  attr_accessor :definition
+  attr_accessor :definition, :url
 
+  @@url = "https://ruby-doc.org/core-2.4.2/String.html"
   @@all = []
 
   def self.define_string
@@ -16,6 +17,10 @@ class RubyDictionary::String
 
   def self.all
     @@all
+  end
+
+  def self.url
+    @@url
   end
 
 end
