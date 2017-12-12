@@ -5,13 +5,6 @@ class RubyDictionary::Array < RubyDictionary::Method
   @@all = []
   @@klass_methods = []
 
-  def initialize(name=nil,description=nil,examples=nil,return_statement=nil)
-    @name = name
-    @description = description
-    @examples = examples
-    @return_statement = return_statement
-  end
-
   def self.all
     @@all
   end

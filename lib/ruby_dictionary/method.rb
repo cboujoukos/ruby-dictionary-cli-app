@@ -3,6 +3,7 @@ class RubyDictionary::Method
   attr_accessor :definition, :url, :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq
 
   @@all = []
+  @@inst_methods = []
   @@klass_methods = []
   @callseq = []
 
@@ -13,8 +14,16 @@ class RubyDictionary::Method
     @return_statement = return_statement
   end
 
-  def self.list_public_instance_methods(klass)
+  def self.list_all_methods(klass)
     klass.all.each{|m| puts m.name}
+  end
+
+  def self.list_public_inst_methods(klass)
+    klass.inst_methods.each{|m| puts m.name}
+  end
+
+  def self.list_public_klass_methods(klass)
+    klass.klass_methods.each{|m| puts m.name}
   end
 
 #  def self.define(klass)
@@ -33,12 +42,15 @@ class RubyDictionary::Method
     input = nil
     puts "\n"
     puts self.define(klass)
-    puts "\nEnter 'list' to see a list of public instance methods, or enter the name of a method to define, or enter 'menu' to go back"
+    puts "\nEnter 'i' to see a list of public instance methods, 'c' to see a list of public class methods, or enter the name of a method to define, or enter 'menu' to go back"
     until input == "menu" || input == "exit"
       input = gets.strip.downcase
       case
-      when input == "list"
-        list_public_instance_methods(klass)
+      when input == "i" || input == "instance"
+        list_public_inst_methods(klass)
+        puts "\n"
+      when input == "c" || input == "class"
+        list_public_klass_methods(klass)
         puts "\n"
       when input == "menu" || input == "exit"
         self.list_data_types
@@ -70,6 +82,10 @@ class RubyDictionary::Method
 
   def self.klass_methods
     @@klass_methods
+  end
+
+  def self.inst_methods
+    @@inst_methods
   end
 
   def self.list_data_types

@@ -16,6 +16,8 @@ class RubyDictionary::Scraper
     public_instance_method_names.each do |mn|
       method = klass.new
       method.name = mn.css("a").text.gsub(/&lt;|&gt;|&amp;|#/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&", '#' => "")
+      klass.inst_methods << method  if !mn.css("a").text.start_with?(":")
+      #klass.instance_methods << method  if !mn.css("a").text.start_with?(":")
       klass.all << method  if !mn.css("a").text.start_with?(":")
     end
     public_instance_methods = doc.css("#public-instance-method-details .method-detail")
@@ -47,6 +49,7 @@ class RubyDictionary::Scraper
       method = klass.new
       method.name = mn.css("a").text.gsub(/&lt;|&gt;|&amp;|#/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&", '#' => "")
       klass.klass_methods << method  if mn.css("a").text.start_with?(":")
+      klass.all << method  if mn.css("a").text.start_with?(":")
     end
     public_klass_methods = doc.css("div#public-class-method-details.method-section .method-detail")
     i=0
@@ -67,7 +70,6 @@ class RubyDictionary::Scraper
       #method.test_desc = doc.xpath("//")
       i+=1
     end
-    binding.pry
   end
 
 ####  ALTERNATE SCRAPE METHOD  ####

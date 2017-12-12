@@ -30,8 +30,8 @@ class RubyDictionary::CLI
         RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Array, RubyDictionary::Array.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Array)
       when /dir(s)?\b|2/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Dir, RubyDictionary::Dir.url)
         RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Dir, RubyDictionary::Dir.url)
+        RubyDictionary::Scraper.scrape_names(RubyDictionary::Dir, RubyDictionary::Dir.url)
         RubyDictionary::Method.klass_menu(RubyDictionary::Dir)
       when /enumerable(s)?\b|3/
         RubyDictionary::Scraper.scrape_names(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
