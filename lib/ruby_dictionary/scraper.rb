@@ -10,23 +10,22 @@ class RubyDictionary::Scraper
   ### method.name = "#{m["id"].split("-")[0]}!" #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
 
 
-  def self.scrape_names(klass, method_url)
+  def self.scrape_inst_methods(klass, method_url)
     doc = Nokogiri::HTML(open(method_url))
     public_instance_method_names = doc.css("#method-list-section ul.link-list li")
     public_instance_method_names.each do |mn|
       method = klass.new
       method.name = mn.css("a").text.gsub(/&lt;|&gt;|&amp;|#/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&", '#' => "")
       klass.inst_methods << method  if !mn.css("a").text.start_with?(":")
-      #klass.instance_methods << method  if !mn.css("a").text.start_with?(":")
       klass.all << method  if !mn.css("a").text.start_with?(":")
     end
     public_instance_methods = doc.css("#public-instance-method-details .method-detail")
     i=0
     public_instance_methods.each do |m|
 
-      klass.all[i].description = m.css(".method-heading + div p").text.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      klass.all[i].examples = m.css("pre.ruby").text.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      klass.all[i].return_statement = m.css(".method-callseq").text.split("→ ")[1]
+      klass.inst_methods[i].description = m.css(".method-heading + div p").text.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+      klass.inst_methods[i].examples = m.css("pre.ruby").text.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+      klass.inst_methods[i].return_statement = m.css(".method-callseq").text.split("→ ")[1]
       call_sequence = []
       if m.css(".method-heading").length == 1
         call_sequence << m.css(".method-callseq").text.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
@@ -35,7 +34,7 @@ class RubyDictionary::Scraper
           call_sequence << variant.css(".method-callseq").text
         end
       end
-      klass.all[i].callseq = call_sequence
+      klass.inst_methods[i].callseq = call_sequence
       #method.test_desc = doc.xpath("//")
       i+=1
     end
@@ -70,6 +69,11 @@ class RubyDictionary::Scraper
       #method.test_desc = doc.xpath("//")
       i+=1
     end
+  end
+
+  def self.scrape_klass(klass, url)
+    scrape_inst_methods(klass, url)
+    scrape_klass_methods(klass, url)
   end
 
 ####  ALTERNATE SCRAPE METHOD  ####

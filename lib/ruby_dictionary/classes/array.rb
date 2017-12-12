@@ -1,4 +1,4 @@
-class RubyDictionary::Array < RubyDictionary::Method
+class RubyDictionary::Array < RubyDictionary::Klass
   attr_accessor :definition, :url, :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq
 
   @@url = "https://ruby-doc.org/core-2.4.2/Array.html"

@@ -16,8 +16,9 @@ user types ruby-dictionary
 Welcomes the user
 asks what Class/Mixin the user wants to explore
 prompts for input
-
-lists public instance methods for the selected data type
+Displays definition of Class
+asks user if they want to display instance methods or class methods
+lists public instance/class/all methods for the selected data type
 
 Which method do you want to learn more about?
 prompts user to enter #method
@@ -33,3 +34,9 @@ FIND OUT HOW TO REMOVE HTML TAGS FROM DESCRIPTIONS (ie See Also links)
 IS THERE A WAY TO SET UP AN ANCHOR IN MY CLI MENU SO THAT WHEN I TYPE EXIT FROM A KLASS MENU IT EXITS THE CLI MENU AND SKIPS TO #GOODBY?
 
 ADJUST/ADD CLEAR ALL METHOD?
+
+
+NEED  TO ADD A CONDITION THAT METHODS SHOULD ONLY BE ADDED TO ALL/INST_METHODS/KLASS_METHODS IF THAT METHOD CANNOT BE FOUND IN THERE.
+
+
+WHY IS KLASS.ALL CLEARING WHEN I ENTER MENU/EXIT BUT THE OTHER TWO ARAYS ARE NOT??!

@@ -26,44 +26,80 @@ class RubyDictionary::CLI
       when "list"
         list_data_types
       when /array(s)?\b|1/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Array, RubyDictionary::Array.url)
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Array, RubyDictionary::Array.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::Array)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Array, RubyDictionary::Array.url)
+        #RubyDictionary::Scraper.scrape_names(RubyDictionary::Array, RubyDictionary::Array.url)
+        #RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Array, RubyDictionary::Array.url)
+        klass_menu(RubyDictionary::Array)
       when /dir(s)?\b|2/
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Dir, RubyDictionary::Dir.url)
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Dir, RubyDictionary::Dir.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::Dir)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Dir, RubyDictionary::Dir.url)
+        RubyDictionary::Klass.klass_menu(RubyDictionary::Dir)
       when /enumerable(s)?\b|3/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::Enumerable)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
+        RubyDictionary::Klass.klass_menu(RubyDictionary::Enumerable)
       when /hash(es)?\b|4/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Hash, RubyDictionary::Hash.url)
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Hash, RubyDictionary::Hash.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::Hash)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Hash, RubyDictionary::Hash.url)
+        RubyDictionary::Klass.klass_menu(RubyDictionary::Hash)
       when /numeric(s)?\b|5/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::Numeric)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
+        RubyDictionary::Klass.klass_menu(RubyDictionary::Numeric)
       when /proc(s)?\b|6/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Proc, RubyDictionary::Proc.url)
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Proc, RubyDictionary::Proc.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::Proc)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Proc, RubyDictionary::Proc.url)
+        RubyDictionary::Klass.klass_menu(RubyDictionary::Proc)
       when /range(s)?\b|7/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Range, RubyDictionary::Range.url)
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Range, RubyDictionary::Range.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::Range)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Range, RubyDictionary::Range.url)
+        RubyDictionary::Klass.klass_menu(RubyDictionary::Range)
       when /string(s)?\b|8/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::String, RubyDictionary::String.url)
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::String, RubyDictionary::String.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::String)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::String, RubyDictionary::String.url)
+        RubyDictionary::Klass.klass_menu(RubyDictionary::String)
       when /symbol(s)?\b|9/
-        RubyDictionary::Scraper.scrape_names(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
-        RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
-        RubyDictionary::Method.klass_menu(RubyDictionary::Symbol)
+        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
+        RubyDictionary::Klass.klass_menu(RubyDictionary::Symbol)
       else
         if input != "exit"
           puts "I'm sorry, I didn't get that. Please enter a Class or type 'list' or type 'exit'"
+        end
+      end
+    end
+
+    def klass_menu(klass)
+      input = nil
+      puts "\n"
+      puts RubyDictionary::Klass.define(klass)
+      puts "\nEnter 'i' to see a list of public instance methods, 'c' to see a list of public class methods, 'all' to see all public methods, or enter the name of a method to define, or enter 'menu' to go back"
+      until input == "menu" || input == "exit"
+        input = gets.strip.downcase
+        case
+        when input == "i" || input == "instance"
+          list_public_inst_methods(klass)
+          puts "\n"
+        when input == "c" || input == "class"
+          list_public_klass_methods(klass)
+          puts "\n"
+        when input == "all"
+          list_all_methods(klass)
+          puts "\n"
+        when input == "menu" || input == "exit"
+          RubyDictionary::Klass.list_data_types
+          klass.inst_methods.clear
+          klass.klass_methods.clear
+          klass.all.clear
+      #  when input == "exit"
+      #    puts "How do I terminate the program??"
+
+        else
+          if klass.find_by_name(input) == nil
+            puts "Im sorry, I can't find a method by that name, try again or type 'menu' to go to the main menu or type 'exit'"
+          else
+            method = klass.find_by_name(input)
+            puts "\n##{method.name}\n"
+            method.callseq.each do |seq|
+              puts seq
+            end
+            puts "\nReturn Value: #{method.return_statement}\n\n#{method.description}\n\n"
+            if method.examples != ""
+              puts "Examples:\n#{method.examples}\n\n"
+            end
+          end
         end
       end
     end

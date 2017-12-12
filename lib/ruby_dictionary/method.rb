@@ -1,4 +1,4 @@
-class RubyDictionary::Method
+class RubyDictionary::Klass
   extend Findable::ClassMethods
   attr_accessor :definition, :url, :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq
 
@@ -67,8 +67,10 @@ class RubyDictionary::Method
         else
           method = klass.find_by_name(input)
           puts "\n##{method.name}\n"
-          method.callseq.each do |seq|
-            puts seq
+          if method.callseq.length > 0
+            method.callseq.each do |seq|
+              puts seq
+            end
           end
           puts "\nReturn Value: #{method.return_statement}\n\n#{method.description}\n\n"
           if method.examples != ""
