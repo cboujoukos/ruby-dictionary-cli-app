@@ -3,6 +3,7 @@ class RubyDictionary::Method
   attr_accessor :definition, :url, :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq
 
   @@all = []
+  @@klass_methods = []
   @callseq = []
 
   def initialize(name=nil,description=nil,examples=nil,return_statement=nil)
@@ -22,7 +23,7 @@ class RubyDictionary::Method
 #  end
 
   ###div#description p:first-child a, div#description p:nth-child(2) a
-  
+
   def self.define(klass)
     doc = Nokogiri::HTML(open(klass.url))
     @definition = doc.css("div#description p:first-child, div#description p:nth-child(2)").text.gsub(/<span.{1,25}>|<\/span>/,"").gsub(/<code>|<\/code>/,"").gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
@@ -67,8 +68,12 @@ class RubyDictionary::Method
     @@all
   end
 
+  def self.klass_methods
+    @@klass_methods
+  end
+
   def self.list_data_types
-    @data_types = ["1. Enumerables", "2. Strings", "3. Symbols", "4. Numeric", "5. Arrays", "6. Hashes", "7. Dir", "8. Range", "9. Proc"]
+    @data_types = ["1. Arrays", "2. Dir", "3. Enumerables", "4. Hashes", "5. Numeric", "6. Procs", "7. Ranges", "8. Strings", "9. Symbols"]
     puts @data_types
     puts "Enter the data type or mixin you would like to explore, or type exit."
   end

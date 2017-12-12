@@ -3,6 +3,7 @@ class RubyDictionary::Array < RubyDictionary::Method
 
   @@url = "https://ruby-doc.org/core-2.4.2/Array.html"
   @@all = []
+  @@klass_methods = []
 
   def initialize(name=nil,description=nil,examples=nil,return_statement=nil)
     @name = name
@@ -13,6 +14,10 @@ class RubyDictionary::Array < RubyDictionary::Method
 
   def self.all
     @@all
+  end
+
+  def self.klass_methods
+    @@klass_methods
   end
 
   def self.url

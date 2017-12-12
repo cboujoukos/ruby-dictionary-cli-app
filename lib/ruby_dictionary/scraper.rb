@@ -39,6 +39,36 @@ class RubyDictionary::Scraper
     end
   end
 
+  def self.scrape_klass_methods(klass, klass_url)
+    doc = Nokogiri::HTML(open(klass_url))
+    #public_klass_methods = doc.css("div#public-class-method-details.method-section")
+    all_method_names = doc.css("#method-list-section ul.link-list li")
+    all_method_names.each do |mn|
+      method = klass.new
+      method.name = mn.css("a").text.gsub(/&lt;|&gt;|&amp;|#/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&", '#' => "")
+      klass.klass_methods << method  if mn.css("a").text.start_with?(":")
+    end
+    public_klass_methods = doc.css("div#public-class-method-details.method-section .method-detail")
+    i=0
+    public_klass_methods.each do |m|
+
+      klass.klass_methods[i].description = m.css(".method-heading + div p").text.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+      klass.klass_methods[i].examples = m.css("pre.ruby").text.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+      klass.klass_methods[i].return_statement = m.css(".method-callseq").text.split("→ ")[1]
+      call_sequence = []
+      if m.css(".method-heading").length == 1
+        call_sequence << m.css(".method-callseq").text.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+      else
+        m.css(".method-heading").each do |variant|
+          call_sequence << variant.css(".method-callseq").text
+        end
+      end
+      klass.klass_methods[i].callseq = call_sequence
+      #method.test_desc = doc.xpath("//")
+      i+=1
+    end
+    binding.pry
+  end
 
 ####  ALTERNATE SCRAPE METHOD  ####
 
