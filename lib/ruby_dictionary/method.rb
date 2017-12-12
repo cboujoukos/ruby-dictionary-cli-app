@@ -42,7 +42,7 @@ class RubyDictionary::Method
     input = nil
     puts "\n"
     puts self.define(klass)
-    puts "\nEnter 'i' to see a list of public instance methods, 'c' to see a list of public class methods, or enter the name of a method to define, or enter 'menu' to go back"
+    puts "\nEnter 'i' to see a list of public instance methods, 'c' to see a list of public class methods, 'all' to see all public methods, or enter the name of a method to define, or enter 'menu' to go back"
     until input == "menu" || input == "exit"
       input = gets.strip.downcase
       case
@@ -51,6 +51,9 @@ class RubyDictionary::Method
         puts "\n"
       when input == "c" || input == "class"
         list_public_klass_methods(klass)
+        puts "\n"
+      when input == "all"
+        list_all_methods(klass)
         puts "\n"
       when input == "menu" || input == "exit"
         self.list_data_types
