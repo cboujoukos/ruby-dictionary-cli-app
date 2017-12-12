@@ -21,9 +21,10 @@ class RubyDictionary::Method
 #    @definition = doc.css("div#description p, div#description pre, div#description pre span, div#description a, div#description h2").text.gsub(/<span.{1,25}>|<\/span>/,"").gsub(/<code>|<\/code>/,"").gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&").gsub("¶ ↑","\n")
 #  end
 
+  ###div#description p:first-child a, div#description p:nth-child(2) a
   def self.define(klass)
     doc = Nokogiri::HTML(open(klass.url))
-    @definition = doc.css("div#description p:first-child, div#description p:nth-child(2), div#description p:first-child a, div#description p:nth-child(2) a").text.gsub(/<span.{1,25}>|<\/span>/,"").gsub(/<code>|<\/code>/,"").gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+    @definition = doc.css("div#description p:first-child, div#description p:nth-child(2)").text.gsub(/<span.{1,25}>|<\/span>/,"").gsub(/<code>|<\/code>/,"").gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
   end
 
   def self.klass_menu(klass)
