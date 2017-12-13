@@ -9,14 +9,21 @@ class RubyDictionary::Scraper
   ### method.name = m.text.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
   ### method.name = "#{m["id"].split("-")[0]}!" #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
 
+  def scrape(klass, url)
+    doc = Nokogiri::HTML(open(url))
+    method_list = doc.css("#method-list-section ul.link-list li")
+    method_list
+  end
 
-  def self.scrape_inst_methods(klass, method_url)
-    doc = Nokogiri::HTML(open(method_url))
-    public_instance_method_names = doc.css("#method-list-section ul.link-list li")
-    public_instance_method_names.each do |mn|
+
+  def self.scrape_inst_methods(klass, klass_url)
+    doc = Nokogiri::HTML(open(klass_url))
+    all_method_names = doc.css("#method-list-section ul.link-list li")
+    all_method_names.each do |mn|
       method = klass.new
       method.name = mn.css("a").text.gsub(/&lt;|&gt;|&amp;|#/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&", '#' => "")
       klass.inst_methods << method  if !mn.css("a").text.start_with?(":")
+
       klass.all << method  if !mn.css("a").text.start_with?(":")
     end
     public_instance_methods = doc.css("#public-instance-method-details .method-detail")
@@ -72,8 +79,8 @@ class RubyDictionary::Scraper
   end
 
   def self.scrape_klass(klass, url)
-    scrape_inst_methods(klass, url)
     scrape_klass_methods(klass, url)
+    scrape_inst_methods(klass, url)
   end
 
 ####  ALTERNATE SCRAPE METHOD  ####

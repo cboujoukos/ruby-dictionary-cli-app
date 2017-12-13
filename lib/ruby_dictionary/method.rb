@@ -1,11 +1,7 @@
 class RubyDictionary::Klass
   extend Findable::ClassMethods
-  attr_accessor :definition, :url, :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq
+  attr_accessor :definition, :url, :name, :description, :examples, :see_also, :return_statement, :test_desc, :callseq, :method_type
 
-  @@all = []
-  @@inst_methods = []
-  @@klass_methods = []
-  @callseq = []
 
   def initialize(name=nil,description=nil,examples=nil,return_statement=nil)
     @name = name
@@ -14,8 +10,8 @@ class RubyDictionary::Klass
     @return_statement = return_statement
   end
 
-  def self.list_all_methods(klass)
-    klass.all.each{|m| puts m.name}
+  def self.list_all_methods
+    self.all.each{|m| puts m.name}
   end
 
   def self.list_public_inst_methods(klass)
@@ -53,7 +49,7 @@ class RubyDictionary::Klass
         list_public_klass_methods(klass)
         puts "\n"
       when input == "all"
-        list_all_methods(klass)
+        self.list_all_methods
         puts "\n"
       when input == "menu" || input == "exit"
         self.list_data_types
