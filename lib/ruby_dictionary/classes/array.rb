@@ -23,8 +23,16 @@ class RubyDictionary::Array < RubyDictionary::Klass
     @@url
   end
 
-  def self.list_public_inst_methods
-    self.inst_methods.each{|m| puts m.name}
-  end
+#  def self.list_public_inst_methods
+#    self.inst_methods.each{|m| puts m.name}
+#  end
+#
+#  def self.list_public_klass_methods
+#    self.klass_methods.each{|m| puts m.name}
+#  end
+#
+#  def self.list_all_methods
+#    self.all.each{|m| puts m.name}
+#  end
 
 end

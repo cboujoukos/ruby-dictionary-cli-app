@@ -31,22 +31,16 @@ class RubyDictionary::CLI
         klass.list_public_inst_methods
         puts "\n"
       when input == "c" || input == "class"
-        list_public_klass_methods(klass)
+        klass.list_public_klass_methods
         puts "\n"
       when input == "all"
-        list_public_inst_methods(klass)
-        list_public_klass_methods(klass)
-        #list_all_methods(klass)
+        klass.list_all_methods
         puts "\n"
-      when input == "menu" || input == "exit"
+      when input == "menu" || input == "exit" || input == "back"
         RubyDictionary::Klass.list_data_types
         klass.inst_methods.clear
         klass.klass_methods.clear
         klass.all.clear
-        #binding.pry
-    #  when input == "exit"
-    #    puts "How do I terminate the program??"
-
       else
         if klass.find_by_name(input) == nil
           puts "Im sorry, I can't find a method by that name, try again or type 'menu' to go to the main menu or type 'exit'"
@@ -75,34 +69,29 @@ class RubyDictionary::CLI
       when "list"
         list_data_types
       when /array(s)?\b|1/
-        #RubyDictionary::Scraper.scrape_klass(RubyDictionary::Array, RubyDictionary::Array.url)
-        #RubyDictionary::Scraper.scrape_names(RubyDictionary::Array, RubyDictionary::Array.url)
-        #RubyDictionary::Scraper.scrape_klass_methods(RubyDictionary::Array, RubyDictionary::Array.url)
         klass_menu(RubyDictionary::Array)
       when /dir(s)?\b|2/
         RubyDictionary::Scraper.scrape_klass(RubyDictionary::Dir, RubyDictionary::Dir.url)
-        RubyDictionary::Dir.klass_menu(RubyDictionary::Dir)
+        klass_menu(RubyDictionary::Dir)
       when /enumerable(s)?\b|3/
-        #RubyDictionary::Scraper.scrape_klass(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
-        RubyDictionary::Enumerable.klass_menu(RubyDictionary::Enumerable)
+        klass_menu(RubyDictionary::Enumerable)
       when /hash(es)?\b|4/
-        #RubyDictionary::Scraper.scrape_klass(RubyDictionary::Hash, RubyDictionary::Hash.url)
-        RubyDictionary::Hash.klass_menu(RubyDictionary::Hash)
+        klass_menu(RubyDictionary::Hash)
       when /numeric(s)?\b|5/
         RubyDictionary::Scraper.scrape_klass(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
-        RubyDictionary::Klass.klass_menu(RubyDictionary::Numeric)
+        klass_menu(RubyDictionary::Numeric)
       when /proc(s)?\b|6/
         RubyDictionary::Scraper.scrape_klass(RubyDictionary::Proc, RubyDictionary::Proc.url)
-        RubyDictionary::Klass.klass_menu(RubyDictionary::Proc)
+        klass_menu(RubyDictionary::Proc)
       when /range(s)?\b|7/
         RubyDictionary::Scraper.scrape_klass(RubyDictionary::Range, RubyDictionary::Range.url)
-        RubyDictionary::Klass.klass_menu(RubyDictionary::Range)
+        klass_menu(RubyDictionary::Range)
       when /string(s)?\b|8/
         RubyDictionary::Scraper.scrape_klass(RubyDictionary::String, RubyDictionary::String.url)
-        RubyDictionary::Klass.klass_menu(RubyDictionary::String)
+        klass_menu(RubyDictionary::String)
       when /symbol(s)?\b|9/
         RubyDictionary::Scraper.scrape_klass(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
-        RubyDictionary::Klass.klass_menu(RubyDictionary::Symbol)
+        klass_menu(RubyDictionary::Symbol)
       else
         if input != "exit"
           puts "I'm sorry, I didn't get that. Please enter a Class or type 'list' or type 'exit'"
