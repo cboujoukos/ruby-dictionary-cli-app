@@ -1,103 +1,118 @@
 # CLI Controller
-
-class RubyDictionary::CLI
-
-
+require 'pry'
+class CLI
 
   def call
+    Scraper.scrape_index
     puts "Welcome to the Ruby Dictionary!"
-    list_data_types
-    RubyDictionary::Scraper.scrape_klass(RubyDictionary::Array, RubyDictionary::Array.url)
-    RubyDictionary::Scraper.scrape_klass(RubyDictionary::Enumerable, RubyDictionary::Enumerable.url)
-    RubyDictionary::Scraper.scrape_klass(RubyDictionary::Hash, RubyDictionary::Hash.url)
-    cli_menu
+    scrape_slow_classes
+    list_klasses
+    main_menu
     goodbye
   end
 
-  def list_data_types
-    @data_types = ["1. Arrays", "2. Dir", "3. Enumerables", "4. Hashes", "5. Numeric", "6. Procs", "7. Ranges", "8. Strings", "9. Symbols"]
-    puts @data_types
+  def scrape_slow_classes
+    @array = Klass.list[0]
+    Scraper.scrape_klass(@array)
+    @enum = Klass.list[2]
+    Scraper.scrape_klass(@enum)
+  end
+
+  def list_klasses
+    Klass.all.each.with_index{|k,i| puts "#{i + 1}. #{k.name}"}
   end
 
   def klass_menu(klass)
     input = nil
     puts "\n"
-    puts RubyDictionary::Klass.define(klass)
-    puts "\nEnter 'i' to see a list of public instance methods, 'c' to see a list of public class methods, 'all' to see all public methods, or enter the name of a method to define, or enter 'menu' to go back"
-    until input == "menu" || input == "exit"
+    puts klass.definition
+    puts "\nEnter 'i' to see a list of public instance methods\nEnter 'c' to see a list of public class methods\nEnter 'all' to see all public methods available\nEnter the name of a method to learn more\nEnter 'menu' or 'back' to go back to the list of Classes and Mixins\nOr enter 'exit' to quit"
+    until input == "menu" || input == "back"
       input = gets.strip.downcase
       case
       when input == "i" || input == "instance"
-        klass.list_public_inst_methods
+        klass.list_inst_methods
         puts "\n"
       when input == "c" || input == "class"
-        klass.list_public_klass_methods
+        klass.list_klass_methods
         puts "\n"
       when input == "all"
         klass.list_all_methods
         puts "\n"
-      when input == "menu" || input == "exit" || input == "back"
-        RubyDictionary::Klass.list_data_types
-        klass.inst_methods.clear
-        klass.klass_methods.clear
-        klass.all.clear
+      when input == "menu" || input == "back"
+        list_klasses
+      when input == "exit"
+        puts "Happy Coding!!!"
+        exit
       else
         if klass.find_by_name(input) == nil
-          puts "Im sorry, I can't find a method by that name, try again or type 'menu' to go to the main menu or type 'exit'"
+          puts "Im sorry, I can't find a method by that name, try again or type 'menu' to go to the main menu or type 'exit' to quit"
         else
           method = klass.find_by_name(input)
           puts "\n##{method.name}\n"
           method.callseq.each do |seq|
             puts seq
           end
-          puts "\nReturn Value: #{method.return_statement}\n\n#{method.description}\n\n"
+          puts "\n#{method.description}"
           if method.examples != ""
-            puts "Examples:\n#{method.examples}\n\n"
+            puts "\nExamples:\n#{method.examples}\n\n"
           end
         end
       end
     end
   end
 
-  def cli_menu
+  def main_menu
     input = nil
     puts "Enter the Class or Mixin you would like to explore, or type 'exit'"
+    #Klass.all.each do |k|
+    #  Scraper.scrape_klass(k)
+    #end
     until input == "exit"
 
       input = gets.strip.downcase
       case input
       when "list"
-        list_data_types
+        list_klasses
       when /array(s)?\b|1/
-        klass_menu(RubyDictionary::Array)
+        klass_menu(@array)
       when /dir(s)?\b|2/
-        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Dir, RubyDictionary::Dir.url)
-        klass_menu(RubyDictionary::Dir)
+        @dir = Klass.list[1]
+        Scraper.scrape_klass(@dir)
+        klass_menu(@dir)
       when /enumerable(s)?\b|3/
-        klass_menu(RubyDictionary::Enumerable)
+        klass_menu(@enum)
       when /hash(es)?\b|4/
-        klass_menu(RubyDictionary::Hash)
+        @hash = Klass.list[3]
+        Scraper.scrape_klass(@hash)
+        klass_menu(@hash)
       when /numeric(s)?\b|5/
-        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Numeric, RubyDictionary::Numeric.url)
-        klass_menu(RubyDictionary::Numeric)
+        @num = Klass.list[4]
+        Scraper.scrape_klass(@num)
+        klass_menu(@num)
       when /proc(s)?\b|6/
-        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Proc, RubyDictionary::Proc.url)
-        klass_menu(RubyDictionary::Proc)
+        @prok = Klass.list[5]
+        Scraper.scrape_klass(@prok)
+        klass_menu(@prok)
       when /range(s)?\b|7/
-        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Range, RubyDictionary::Range.url)
-        klass_menu(RubyDictionary::Range)
+        @range = Klass.list[6]
+        Scraper.scrape_klass(@range)
+        klass_menu(@range)
       when /string(s)?\b|8/
-        RubyDictionary::Scraper.scrape_klass(RubyDictionary::String, RubyDictionary::String.url)
-        klass_menu(RubyDictionary::String)
+        @string = Klass.list[7]
+        Scraper.scrape_klass(@string)
+        klass_menu(@string)
       when /symbol(s)?\b|9/
-        RubyDictionary::Scraper.scrape_klass(RubyDictionary::Symbol, RubyDictionary::Symbol.url)
-        klass_menu(RubyDictionary::Symbol)
+        @symbol = Klass.list[8]
+        Scraper.scrape_klass(@symbol)
+        klass_menu(@symbol)
       else
         if input != "exit"
           puts "I'm sorry, I didn't get that. Please enter a Class or type 'list' or type 'exit'"
         end
       end
     end
+
 
     def goodbye
       puts "Happy Coding!!!"

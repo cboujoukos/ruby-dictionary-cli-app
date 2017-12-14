@@ -1,123 +1,98 @@
 require 'nokogiri'
+require 'uri'
+require 'pry'
 
+class Scraper
 
-class RubyDictionary::Scraper
-
-
-  ### instance_methods = doc.css("#public-instance-method-details .method-callseq")
-  ### instance_methods.first.text.split("→ ")[0] selects everything before the return statement.
-  ### method.name = m.text.split("→ ")[0] # This causes problems for methods that have multiple ways of of being called like slice(index), slice(range), slice(regexp), etc
-  ### method.name = "#{m["id"].split("-")[0]}!" #this causes problems methods that are stupidly classified as 2A 2A or 3D etc. (anything that comes before #bytes in the public method lists)
-
-  def scrape(klass, url)
-    doc = Nokogiri::HTML(open(url))
-    method_list = doc.css("#method-list-section ul.link-list li")
-    method_list
+  def self.scrape_index
+    doc = Nokogiri::HTML(open("http://ruby-doc.org/core-2.4.2/"))
+    klass_list = doc.css("#class-index .entries p")
+    #binding.pry
+    klass_list.each do |k|
+      if k.css("a").text.match(/(Array\b|Dir\b|Enumerable|Hash|Numeric|Proc\b|Range\b|String|Symbol)/) != nil
+        klass = Klass.new
+        klass.name = k.css("a").text.gsub(/"/,"")
+        href = k.css("a")[0]["href"]
+        page_url = "http://ruby-doc.org/core-2.4.2/"
+        klass.url = URI.join(page_url,href)
+        Klass.all << klass
+      end
+      #binding.pry
+    end
   end
 
+  def self.scrape_klass(klass)
+    self.scrape_method_names(klass)
+    self.scrape_instance_method_bodies(klass)
+    #binding.pry
+    self.scrape_klass_method_bodies(klass)
+  end
 
-  def self.scrape_inst_methods(klass, klass_url)
-    doc = Nokogiri::HTML(open(klass_url))
-    all_method_names = doc.css("#method-list-section ul.link-list li")
-    all_method_names.each do |mn|
-      method = klass.new
+  def self.scrape_method_names(klass)
+    doc = Nokogiri::HTML(open(klass.url))
+    klass.definition = doc.css("div#description p:first-child, div#description p:nth-child(2)").text.gsub(/<span.{1,25}>|<\/span>/,"").gsub(/<code>|<\/code>/,"").gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+    method_list = doc.css("#method-list-section ul.link-list li")
+    #binding.pry
+
+    method_list.each do |mn|
+      method = RubyMethod.new
+      #binding.pry
+      if mn.css("a").text.start_with?(":")
+        method.method_type = "Class"
+        klass.add_klass_method(method)
+      else
+        method.method_type = "Instance"
+        klass.add_inst_method(method)
+      end
+      method.klass = klass
       method.name = mn.css("a").text.gsub(/&lt;|&gt;|&amp;|#/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&", '#' => "")
-      klass.inst_methods << method  if !mn.css("a").text.start_with?(":")
-
-      klass.all << method  if !mn.css("a").text.start_with?(":")
+      klass.all_methods << method
     end
-    public_instance_methods = doc.css("#public-instance-method-details .method-detail")
+  end
+####################################################################################
+  def self.scrape_instance_method_bodies(klass)
+    doc = Nokogiri::HTML(open(klass.url))
     i=0
+    #if method.method_type == "Instance"
+    public_instance_methods = doc.css("div#public-instance-method-details.method-section .method-detail")
     public_instance_methods.each do |m|
+      #binding.pry
 
-      klass.inst_methods[i].description = m.css(".method-heading + div p").text.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      klass.inst_methods[i].examples = m.css("pre.ruby").text.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      klass.inst_methods[i].return_statement = m.css(".method-callseq").text.split("→ ")[1]
+      klass.inst_methods[i].description = m.css(".method-heading + div p").text.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' =>">", '&amp;' => "&")
+      klass.inst_methods[i].examples = m.css("pre.ruby").text.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+
       call_sequence = []
       if m.css(".method-heading").length == 1
-        call_sequence << m.css(".method-callseq").text.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+          call_sequence << m.css(".method-callseq").text.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<",'&gt;' => ">", '&amp;' => "&")
       else
         m.css(".method-heading").each do |variant|
           call_sequence << variant.css(".method-callseq").text
         end
       end
       klass.inst_methods[i].callseq = call_sequence
-      #method.test_desc = doc.xpath("//")
       i+=1
     end
+
   end
 
-  def self.scrape_klass_methods(klass, klass_url)
-    doc = Nokogiri::HTML(open(klass_url))
-    #public_klass_methods = doc.css("div#public-class-method-details.method-section")
-    all_method_names = doc.css("#method-list-section ul.link-list li")
-    all_method_names.each do |mn|
-      method = klass.new
-      method.name = mn.css("a").text.gsub(/&lt;|&gt;|&amp;|#/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&", '#' => "")
-      klass.klass_methods << method  if mn.css("a").text.start_with?(":")
-      klass.all << method  if mn.css("a").text.start_with?(":")
-    end
+  def self.scrape_klass_method_bodies(klass)
+    doc = Nokogiri::HTML(open(klass.url))
     public_klass_methods = doc.css("div#public-class-method-details.method-section .method-detail")
     i=0
     public_klass_methods.each do |m|
 
-      klass.klass_methods[i].description = m.css(".method-heading + div p").text.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      klass.klass_methods[i].examples = m.css("pre.ruby").text.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-      klass.klass_methods[i].return_statement = m.css(".method-callseq").text.split("→ ")[1]
+      klass.klass_methods[i].description = m.css(".method-heading + div p").text.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' =>">", '&amp;' => "&")
+      klass.klass_methods[i].examples = m.css("pre.ruby").text.gsub(/<span class=\"ruby-.{1,12}>|<\/span>/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
       call_sequence = []
       if m.css(".method-heading").length == 1
-        call_sequence << m.css(".method-callseq").text.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
+        call_sequence << m.css(".method-callseq").text.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<",'&gt;' => ">", '&amp;' => "&")
       else
         m.css(".method-heading").each do |variant|
           call_sequence << variant.css(".method-callseq").text
         end
       end
       klass.klass_methods[i].callseq = call_sequence
-      #method.test_desc = doc.xpath("//")
       i+=1
     end
   end
-
-  def self.scrape_klass(klass, url)
-    scrape_klass_methods(klass, url)
-    scrape_inst_methods(klass, url)
-  end
-
-####  ALTERNATE SCRAPE METHOD  ####
-
-#  def self.scrape(klass, method_url)
-#
-#    doc = Nokogiri::HTML(open(method_url))
-#    #binding.pry
-#    public_instance_methods = doc.css("#public-instance-method-details #.method-detail")
-#
-#    public_instance_methods.each do |m|
-#      method = klass.new
-#
-#      case
-#      when m["id"].split("-")[0].match(/\d.+/) != nil
-#        method.name = m.css(".method-callseq").text.split("→ #")[0].strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' => "<", '&gt;' => ">", '&amp;' #=> "&").gsub(/\s+/, "")
-#      when m["id"].split("-")[1] == "21"
-#        method.name = "#{m["id"].split("-")[0]}!".gsub(/\s+/, "")
-#      when m["id"].split("-")[1] == "3F"
-#        method.name = "#{m["id"].split("-")[0]}?".gsub(/\s+/, "")
-#      else
-#        method.name = m["id"].split("-")[0].gsub(/\s+/, "")
-#      end
-#      method.description = m.css(".method-heading + div #p").text.gsub(/<.{2,5}>|\n/,"").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' #=> "<", '&gt;' => ">", '&amp;' => "&")
-#      method.examples = m.css("pre.ruby").text.gsub(/<span #class=\"ruby-.{1,12}>|<\/span>/, "").strip.gsub(/&lt;|&gt;|&amp;/, '&lt;' #=> "<", '&gt;' => ">", '&amp;' => "&")
-#      method.return_statement = m.css(".method-callseq").text.split("→ ")[1]
-#      call_sequence = []
-#      if m.css(".method-heading").length == 1
-#        call_sequence << m.css(".method-callseq").text.gsub(/&lt;|&gt;|&amp;/, #'&lt;' => "<", '&gt;' => ">", '&amp;' => "&")
-#      else
-#        m.css(".method-heading").each do |variant|
-#          call_sequence << variant.css(".method-callseq").text
-#        end
-#      end
-#      method.callseq = call_sequence
-#      #method.test_desc = doc.xpath("//")
-#      klass.all << method
-#    end
-#  end
 end

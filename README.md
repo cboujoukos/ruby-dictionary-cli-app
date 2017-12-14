@@ -1,6 +1,9 @@
 # RubyDictionary
 
-Welcome to the Ruby Dictionary gem. With this gem you will be able to do more than just print a list of methods that can be called on an object. This gem allows you to view methods available to you, and call up a description of each method along with examples scraped from ruby-doc.
+Welcome to the Ruby Dictionary gem. With this gem you will be able to do more than just print a list of methods that can be called on an object. This gem allows you to view methods available to you, and call up a description of each method along with available call sequences and examples scraped straight from ruby-docs.
+
+This gem is powered by the Core API docs for Ruby 2.4.2 found at:
+http://ruby-doc.org/
 
 ## Installation
 
@@ -20,7 +23,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The program opens with a list of ruby classes and mixins. you can navigate to any of the class menus by entering the name or associated number into the command line. From there, follow the simple instructions provided in each menu to navigate through this program and you will have access to the power of the official Ruby core 2.4.2 API  docs right from your command line.
 
 ## Development
 
