@@ -12,10 +12,6 @@ class Klass
     @all_methods = []
   end
 
-  def definition
-    @definition
-  end
-
   def add_inst_method(method)
     method.klass = self unless method.klass != nil
     @inst_methods << method unless @inst_methods.include?(method)

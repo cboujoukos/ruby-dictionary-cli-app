@@ -20,6 +20,7 @@ class CLI
 
   def list_klasses
     Klass.all.each.with_index{|k,i| puts "#{i + 1}. #{k.name}"}
+    puts "\nEnter the Class or Mixin you would like to explore, or type 'exit' to quit"
   end
 
   def klass_menu(klass)
@@ -55,7 +56,7 @@ class CLI
           end
           puts "\n#{method.description}"
           if method.examples != ""
-            puts "\nExamples:\n#{method.examples}\n\n"
+            puts "\nExamples:\n#{method.examples}\n"
           end
         end
       end
@@ -64,10 +65,6 @@ class CLI
 
   def main_menu
     input = nil
-    puts "Enter the Class or Mixin you would like to explore, or type 'exit'"
-    #Klass.all.each do |k|
-    #  Scraper.scrape_klass(k)
-    #end
     until input == "exit"
 
       input = gets.strip.downcase
