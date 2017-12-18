@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby_dictionary (0.1.1)
+    ruby_dictionary (1.0.0)
       nokogiri
 
 GEM
