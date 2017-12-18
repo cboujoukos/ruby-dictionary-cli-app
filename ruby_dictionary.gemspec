@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
   spec.bindir        = "exe"
-  spec.executables   = ["ruby-dictionary"]
+#  spec.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   spec.executables << "ruby-dictionary"
   spec.require_paths = ["lib"]
 
