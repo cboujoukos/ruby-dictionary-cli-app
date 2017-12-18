@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   end
   spec.bindir        = "exe"
   spec.executables   = ["ruby-dictionary"]
+  spec.executables << "ruby-dictionary"
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.16"
