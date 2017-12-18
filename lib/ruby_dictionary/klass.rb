@@ -1,4 +1,4 @@
-class Klass
+class RubyDictionary::Klass
   include Findable::InstanceMethods
   attr_accessor :name, :definition, :url, :method
   @@all = []
@@ -43,11 +43,11 @@ class Klass
   end
 
   def list_inst_methods
-    @all_methods.each{|m| puts m.name if m.method_type == "Instance"}
+    @inst_methods.each{|m| puts m.name}
   end
 
   def list_klass_methods
-    @all_methods.each{|m| puts m.name if m.method_type == "Class"}
+    @klass_methods.each{|m| puts m.name}
   end
 
   def list_all_methods

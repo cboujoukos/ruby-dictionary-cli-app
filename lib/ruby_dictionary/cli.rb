@@ -1,9 +1,9 @@
 # CLI Controller
 require 'pry'
-class CLI
+class RubyDictionary::CLI
 
   def call
-    Scraper.scrape_index
+    RubyDictionary::Scraper.scrape_index
     puts "Welcome to the Ruby Dictionary!"
     scrape_slow_classes
     list_klasses
@@ -12,14 +12,14 @@ class CLI
   end
 
   def scrape_slow_classes
-    @array = Klass.list[0]
-    Scraper.scrape_klass(@array)
-    @enum = Klass.list[2]
-    Scraper.scrape_klass(@enum)
+    @array = RubyDictionary::Klass.list[0]
+    RubyDictionary::Scraper.scrape_klass(@array)
+    @enum = RubyDictionary::Klass.list[2]
+    RubyDictionary::Scraper.scrape_klass(@enum)
   end
 
   def list_klasses
-    Klass.all.each.with_index{|k,i| puts "#{i + 1}. #{k.name}"}
+    RubyDictionary::Klass.all.each.with_index{|k,i| puts "#{i + 1}. #{k.name}"}
     puts "\nEnter the Class or Mixin you would like to explore, or type 'exit' to quit"
   end
 
@@ -34,6 +34,8 @@ class CLI
       when input == "i" || input == "instance"
         klass.list_inst_methods
         puts "\n"
+      when input == "more" || input == "next"
+        klass.list_inst_methods
       when input == "c" || input == "class"
         klass.list_klass_methods
         puts "\n"
@@ -57,6 +59,7 @@ class CLI
           puts "\n#{method.description}"
           if method.examples != ""
             puts "\nExamples:\n#{method.examples}\n"
+            puts "\nEnter 'i' to see a list of public instance methods\nEnter 'c' to see a list of public class methods\nEnter 'all' to see all public methods available\nEnter the name of a method to learn more\nEnter 'menu' or 'back' to go back to the list of Classes and Mixins\nOr enter 'exit' to quit"
           end
         end
       end
@@ -74,34 +77,34 @@ class CLI
       when /array(s)?\b|1/
         klass_menu(@array)
       when /dir(s)?\b|2/
-        @dir = Klass.list[1]
-        Scraper.scrape_klass(@dir)
+        @dir = RubyDictionary::Klass.list[1]
+        RubyDictionary::Scraper.scrape_klass(@dir)
         klass_menu(@dir)
       when /enumerable(s)?\b|3/
         klass_menu(@enum)
       when /hash(es)?\b|4/
-        @hash = Klass.list[3]
-        Scraper.scrape_klass(@hash)
+        @hash = RubyDictionary::Klass.list[3]
+        RubyDictionary::Scraper.scrape_klass(@hash)
         klass_menu(@hash)
       when /numeric(s)?\b|5/
-        @num = Klass.list[4]
-        Scraper.scrape_klass(@num)
+        @num = RubyDictionary::Klass.list[4]
+        RubyDictionary::Scraper.scrape_klass(@num)
         klass_menu(@num)
       when /proc(s)?\b|6/
-        @prok = Klass.list[5]
-        Scraper.scrape_klass(@prok)
+        @prok = RubyDictionary::Klass.list[5]
+        RubyDictionary::Scraper.scrape_klass(@prok)
         klass_menu(@prok)
       when /range(s)?\b|7/
-        @range = Klass.list[6]
-        Scraper.scrape_klass(@range)
+        @range = RubyDictionary::Klass.list[6]
+        RubyDictionary::Scraper.scrape_klass(@range)
         klass_menu(@range)
       when /string(s)?\b|8/
-        @string = Klass.list[7]
-        Scraper.scrape_klass(@string)
+        @string = RubyDictionary::Klass.list[7]
+        RubyDictionary::Scraper.scrape_klass(@string)
         klass_menu(@string)
       when /symbol(s)?\b|9/
-        @symbol = Klass.list[8]
-        Scraper.scrape_klass(@symbol)
+        @symbol = RubyDictionary::Klass.list[8]
+        RubyDictionary::Scraper.scrape_klass(@symbol)
         klass_menu(@symbol)
       else
         if input != "exit"

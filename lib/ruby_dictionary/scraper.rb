@@ -2,19 +2,19 @@ require 'nokogiri'
 require 'uri'
 require 'pry'
 
-class Scraper
+class RubyDictionary::Scraper
 
   def self.scrape_index
     doc = Nokogiri::HTML(open("http://ruby-doc.org/core-2.4.2/"))
     klass_list = doc.css("#class-index .entries p")
     klass_list.each do |k|
       if k.css("a").text.match(/(Array\b|Dir\b|Enumerable|Hash|Numeric|Proc\b|Range\b|String|Symbol)/) != nil
-        klass = Klass.new
+        klass = RubyDictionary::Klass.new
         klass.name = k.css("a").text.gsub(/"/,"")
         href = k.css("a")[0]["href"]
         page_url = "http://ruby-doc.org/core-2.4.2/"
         klass.url = URI.join(page_url,href)
-        Klass.all << klass
+        RubyDictionary::Klass.all << klass
       end
     end
   end
@@ -32,7 +32,7 @@ class Scraper
     method_list = doc.css("#method-list-section ul.link-list li")
 
     method_list.each do |mn|
-      method = RubyMethod.new
+      method = RubyDictionary::Method.new
       if mn.css("a").text.start_with?(":")
         method.method_type = "Class"
         klass.add_klass_method(method)

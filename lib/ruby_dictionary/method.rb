@@ -1,4 +1,4 @@
-class RubyMethod
+class RubyDictionary::Method
   include Findable::InstanceMethods
   attr_accessor :name, :callseq, :description, :examples, :method_type, :klass
   @@all = []
