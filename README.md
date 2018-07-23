@@ -22,7 +22,10 @@ Or install it yourself as:
     $ gem install ruby_dictionary
 
 ## Usage
+Execute:
 
+    $ ruby-dictionary
+    
 The program opens with a list of ruby classes and mixins. you can navigate to any of the class menus by entering the name or associated number into the command line. From there, follow the simple instructions provided in each menu to navigate through this program and you will have access to the power of the official Ruby core 2.4.2 API  docs right from your command line.
 
 ## Development
